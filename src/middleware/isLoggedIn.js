@@ -1,0 +1,8 @@
+module.exports = (req, res, next) => {
+  if(req.cookies.username) {
+    // Pasar al siguiente paso de la petición
+    next();
+  } else {
+    res.redirect('/register');
+  }
+}
