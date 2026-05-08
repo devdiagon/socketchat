@@ -4,12 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/chat.css">
   <title>SocketChat</title>
 </head>
 <body>
   <header>
     <h1>Socket Chat</h1>
   </header>
+  <main>
+    <div id="all-messages">
+      <div class="message">
+        <div class="image-container">
+          <img src="img/seal.png"/>
+          <div class="message-body">
+            <div class="user-info">
+              <span class="username">Pedro</span>
+              <span class="timestamp">10:30 AM</span>
+              <p>Este es un mensaje de prueba para evaluar los estilos dados</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="send-message">
+      <input type="text" id="message" placeholder="Escribe algo">
+      <button id="send-message" class="btn secondary">Enviar</button>
+    </div>
+  </main>
   <p>Bienvenido a esta aplicación de chat en tiempo real!</p>
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/script.js"></script>
