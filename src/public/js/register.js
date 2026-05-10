@@ -1,11 +1,11 @@
 const login = document.querySelector('#login');
 
 login.addEventListener('click', (e) => {
+  e.preventDefault();
   const user = document.querySelector('#username').value;
 
   if(user === '') {
     alert('Ingrese un nombre de usuario');
-    e.preventDefault();
     return;
   }
 
