@@ -4,6 +4,18 @@ const socket = io();
 const send = document.querySelector('#send-message');
 const allMessages = document.querySelector('#all-messages');
 
+// Función para sanitizar y escapar caracteres HTML para prevenir XSS
+const escapeHTML = (text) => {
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, (char) => map[char]);
+};
+
 // En caso de presionar enter enviar mensaje
 document.querySelector('#message').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
@@ -38,10 +50,10 @@ socket.on('message', ({ user, message, timestamp }) => {
       </div>
       <div class="message-body">
         <div class="user-info">
-          <span class="username">${user}</span>
-          <span class="time">${timestamp}</span>
+          <span class="username">${escapeHTML(user)}</span>
+          <span class="time">${escapeHTML(String(timestamp))}</span>
           <p>
-            ${message}
+            ${escapeHTML(message)}
           </p>
         </div>
       </div>
