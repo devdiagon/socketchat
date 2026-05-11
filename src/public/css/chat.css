@@ -8,6 +8,35 @@
   margin-bottom: 20px;
 }
 
+.message.own-message {
+  justify-content: flex-start;
+}
+
+.message.other-message {
+  justify-content: flex-end;
+}
+
+.message.other-message .image-container {
+  order: 2;
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.message.other-message .message-body {
+  order: 1;
+  margin-left: 0;
+  margin-right: 0;
+  order: 1;
+}
+
+.message.other-message .message-body .user-info {
+  text-align: right;
+}
+
+.message.other-message .message-body p {
+  text-align: right;
+}
+
 .message .image-container {
   width: 50px;
   align-items: flex-start;
@@ -15,7 +44,10 @@
 
 .message .message-body {
   margin-left: 10px;
-  width: calc(100% - 50px);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .message .message-body .user-info {

@@ -16,6 +16,18 @@ const escapeHTML = (text) => {
   return text.replace(/[&<>"']/g, (char) => map[char]);
 };
 
+// Función para obtener el usuario actual de la cookie
+const getCurrentUser = () => {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [key, value] = cookie.trim().split('=');
+    if (key === 'username') {
+      return value;
+    }
+  }
+  return null;
+};
+
 // En caso de presionar enter enviar mensaje
 document.querySelector('#message').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
@@ -43,8 +55,11 @@ send.addEventListener('click', () => {
 
 //
 socket.on('message', ({ user, message, timestamp }) => {
+  const currentUser = getCurrentUser();
+  const isOtherUser = user !== currentUser;
+  
   const msg = document.createRange().createContextualFragment(`
-    <div class="message">
+    <div class="message ${isOtherUser ? 'other-message' : 'own-message'}">
       <div class="image-container">
         <img src="/img/seal.png" alt="" />
       </div>
@@ -60,4 +75,7 @@ socket.on('message', ({ user, message, timestamp }) => {
     </div>
   `);
   allMessages.append(msg);
+  
+  // Hacer scroll automático hacia el último mensaje
+  allMessages.scrollTop = allMessages.scrollHeight;
 });
