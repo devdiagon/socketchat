@@ -10,9 +10,13 @@ const socket = io();
 
   // Emitir un evento llamado "message" con el contenido de la variable message
   socket.emit("message", message);
+
+  // Limpiar el input del mensaje
+  document.querySelector('#message').value = '';
  });
 
- socket.on('message', ({ user, message }) => {
+//
+socket.on('message', ({ user, message, timestamp }) => {
   const msg = document.createRange().createContextualFragment(`
     <div class="message">
       <div class="image-container">
@@ -21,13 +25,13 @@ const socket = io();
       <div class="message-body">
         <div class="user-info">
           <span class="username">${user}</span>
-          <span class="time">10:30 AM</span>
+          <span class="time">${timestamp}</span>
           <p>
             ${message}
           </p>
         </div>
       </div>
     </div>
-    `);
-    allMessages.append(msg);
- });
+  `);
+  allMessages.append(msg);
+});

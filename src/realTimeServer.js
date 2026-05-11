@@ -11,8 +11,12 @@ module.exports = (httpServer) => {
       io.emit('message', {
         user: 'Fredo',
         message,
+        timestamp: new Date().toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        }),
       });
     });
-
   });
 };
