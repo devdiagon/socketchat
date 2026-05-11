@@ -1,6 +1,6 @@
 #all-messages {
   padding: 50px 25px;
-  background-color: #FFFFFF; /* Fondo blanco institucional */
+  background-color: #ffffff; /* Fondo blanco institucional */
 }
 
 .message {
@@ -24,7 +24,7 @@
 }
 
 .message .message-body .user-info .time {
-  color: #FFD700; /* Amarillo institucional */
+  color: #ffd700; /* Amarillo institucional */
   font-size: 13px;
 }
 
@@ -50,7 +50,7 @@
 
 .send-message button {
   margin-left: 10px;
-  background-color: #FFD700; /* Amarillo institucional */
+  background-color: #ffd700; /* Amarillo institucional */
   color: #000000; /* Texto negro para contraste */
   font-weight: bold;
   border: none;
@@ -62,5 +62,5 @@
 
 .send-message button:hover {
   background-color: #006633; /* Verde institucional al hover */
-  color: #FFFFFF; /* Texto blanco */
+  color: #ffffff; /* Texto blanco */
 }
