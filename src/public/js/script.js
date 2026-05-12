@@ -1,32 +1,11 @@
+import { getCurrentUser } from '../../utils/cookieUtils.js';
+import { escapeHTML } from '../../utils/stringUtils.js';
+
 // Iniciar servidor de Socket
 const socket = io();
 
 const send = document.querySelector('#send-message');
 const allMessages = document.querySelector('#all-messages');
-
-// Función para sanitizar y escapar caracteres HTML para prevenir XSS
-const escapeHTML = (text) => {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, (char) => map[char]);
-};
-
-// Función para obtener el usuario actual de la cookie
-const getCurrentUser = () => {
-  const cookies = document.cookie.split(';');
-  for (let cookie of cookies) {
-    const [key, value] = cookie.trim().split('=');
-    if (key === 'username') {
-      return value;
-    }
-  }
-  return null;
-};
 
 // En caso de presionar enter enviar mensaje
 document.querySelector('#message').addEventListener('keypress', (e) => {
@@ -53,7 +32,7 @@ send.addEventListener('click', () => {
   document.querySelector('#message').focus();
  });
 
-//
+// Escuchar el evento "message" para mostrar los mensajes en pantalla
 socket.on('message', ({ user, message, timestamp }) => {
   const currentUser = getCurrentUser();
   const isOtherUser = user !== currentUser;
@@ -75,7 +54,53 @@ socket.on('message', ({ user, message, timestamp }) => {
     </div>
   `);
   allMessages.append(msg);
-  
-  // Hacer scroll automático hacia el último mensaje
-  allMessages.scrollTop = allMessages.scrollHeight;
+});
+
+
+// Manejo del evento typing
+let typingTimeout = null;
+
+document.querySelector('#message').addEventListener('input', () => {
+  // Emitir el evento de 'typing' (está escribiendo)
+  socket.emit('typing');
+
+  // Si ya había un timer corriendo, se reinicio
+  clearTimeout(typingTimeout);
+
+  // Si el usuario deja de escribir por 1.5s, se emite el stopTyping
+  typingTimeout = setTimeout(() => {
+    socket.emit('stopTyping');
+  }, 1500);
+});
+
+
+// Construir elementos HTML de eventos de escritura
+const typingUsers = new Set();
+const typingIndicator = document.querySelector('#typing-indicator');
+
+const updateTypingIndicator = () => {
+  // Si nadie escribe no mostrar nada
+  if (typingUsers.size === 0) {
+    typingIndicator.textContent = '';
+    // Detener la animación removiendo la clase
+    typingIndicator.classList.remove('visible');
+  } else {
+    // Mostrar si uno o varios usuarios están escribiendo
+    const names = [...typingUsers].join(', ');
+    const verb = typingUsers.size === 1 ? 'está escribiendo' : 'están escribiendo';
+    typingIndicator.textContent = `${names} ${verb}...`;
+    // Activar la animación agregando la clase
+    typingIndicator.classList.add('visible');
+  }
+};
+
+// Escuchar eventos de 'typing'
+socket.on('typing', ({ user }) => {
+  typingUsers.add(user);
+  updateTypingIndicator();
+});
+
+socket.on('stopTyping', ({ user }) => {
+  typingUsers.delete(user);
+  updateTypingIndicator();
 });

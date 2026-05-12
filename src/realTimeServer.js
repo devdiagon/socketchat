@@ -1,5 +1,7 @@
-module.exports = (httpServer) => {
-  const { Server } = require('socket.io');
+import { Server } from 'socket.io';
+import { getUserFromSocket } from './utils/cookieUtils.js';
+
+const realTimeServer = (httpServer) => {
   const io = new Server(httpServer);
 
   // Encender la contectividad del socket
@@ -8,11 +10,8 @@ module.exports = (httpServer) => {
 
     // Llamar al evento 'message' y obtener sus parámetros (en este caso con la variable llamada message)
     socket.on('message', message => {
-      // Obtener la cookie desde el socket
-      const cookie = socket.request.headers.cookie;
-      // Extraer el nombre de usuario de la cookie
-      // la cookie tiene el valor de la forma "username=value"
-      const user = cookie.split("=").pop();
+
+      const user = getUserFromSocket(socket);
 
       io.emit('message', {
         user,
@@ -24,5 +23,21 @@ module.exports = (httpServer) => {
         }),
       });
     });
+    
+    // Llamar al evento 'typing' cuando esté escribiendo
+    socket.on('typing', () => {
+      const user = getUserFromSocket(socket);
+      // Usar bradcast para solo enviar al resto menos al usuario actual
+      socket.broadcast.emit('typing', { user });
+    });
+
+    // Llamar al evento 'stopTyping' cuando deje de escribir
+    socket.on('stopTyping', () => {
+      const user = getUserFromSocket(socket);
+      // Usar bradcast para solo enviar al resto menos al usuario actual
+      socket.broadcast.emit('stopTyping', { user });
+    });
   });
 };
+
+export default realTimeServer;

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/chat.css">
+  <link rel="stylesheet" href="css/typing.css">
   <title>SocketChat</title>
 </head>
 <body>
@@ -15,12 +16,13 @@
     <div id="all-messages">
       <!-- Mensajes que vengan se colocan aquí -->
     </div>
+    <div id="typing-indicator"></div>
     <div class="send-message">
       <input type="text" id="message" />
       <button id="send-message" class="btn secondary">Enviar</button>
     </div>
   </main>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/script.js"></script>
+  <script type="module" src="/js/script.js"></script>
 </body>
 </html>
