@@ -54,9 +54,6 @@ socket.on('message', ({ user, message, timestamp }) => {
     </div>
   `);
   allMessages.append(msg);
-  
-  // Hacer scroll automático hacia el último mensaje
-  allMessages.scrollTop = allMessages.scrollHeight;
 });
 
 
