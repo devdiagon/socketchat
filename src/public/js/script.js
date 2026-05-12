@@ -85,11 +85,15 @@ const updateTypingIndicator = () => {
   // Si nadie escribe no mostrar nada
   if (typingUsers.size === 0) {
     typingIndicator.textContent = '';
+    // Detener la animación removiendo la clase
+    typingIndicator.classList.remove('visible');
   } else {
     // Mostrar si uno o varios usuarios están escribiendo
     const names = [...typingUsers].join(', ');
     const verb = typingUsers.size === 1 ? 'está escribiendo' : 'están escribiendo';
     typingIndicator.textContent = `${names} ${verb}...`;
+    // Activar la animación agregando la clase
+    typingIndicator.classList.add('visible');
   }
 };
 

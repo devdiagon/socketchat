@@ -1,0 +1,26 @@
+/* Posicionamiento justo encima de .send-message */
+#typing-indicator {
+  position: fixed;
+  bottom: calc(54px + env(safe-area-inset-bottom)); /* altura aprox. de .send-message */
+  left: 0;
+  right: 0;
+  padding: 4px 16px;
+  font-size: 16px;
+  font-style: italic;
+  color: #006633;
+  background-color: #ffffff;
+  min-height: 24px;                /* evita que el layout salte cuando aparece */
+  pointer-events: none;            /* no interfiere con clics */
+
+  /* animación de pulsación — solo activa cuando hay texto */
+  animation: none;
+}
+
+#typing-indicator.visible {
+  animation: typing-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes typing-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
