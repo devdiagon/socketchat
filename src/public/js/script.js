@@ -32,7 +32,7 @@ send.addEventListener('click', () => {
   document.querySelector('#message').focus();
  });
 
-//
+// Escuchar el evento "message" para mostrar los mensajes en pantalla
 socket.on('message', ({ user, message, timestamp }) => {
   const currentUser = getCurrentUser();
   const isOtherUser = user !== currentUser;
@@ -57,4 +57,49 @@ socket.on('message', ({ user, message, timestamp }) => {
   
   // Hacer scroll automático hacia el último mensaje
   allMessages.scrollTop = allMessages.scrollHeight;
+});
+
+
+// Manejo del evento typing
+let typingTimeout = null;
+
+document.querySelector('#message').addEventListener('input', () => {
+  // Emitir el evento de 'typing' (está escribiendo)
+  socket.emit('typing');
+
+  // Si ya había un timer corriendo, se reinicio
+  clearTimeout(typingTimeout);
+
+  // Si el usuario deja de escribir por 1.5s, se emite el stopTyping
+  typingTimeout = setTimeout(() => {
+    socket.emit('stopTyping');
+  }, 1500);
+});
+
+
+// Construir elementos HTML de eventos de escritura
+const typingUsers = new Set();
+const typingIndicator = document.querySelector('#typing-indicator');
+
+const updateTypingIndicator = () => {
+  // Si nadie escribe no mostrar nada
+  if (typingUsers.size === 0) {
+    typingIndicator.textContent = '';
+  } else {
+    // Mostrar si uno o varios usuarios están escribiendo
+    const names = [...typingUsers].join(', ');
+    const verb = typingUsers.size === 1 ? 'está escribiendo' : 'están escribiendo';
+    typingIndicator.textContent = `${names} ${verb}...`;
+  }
+};
+
+// Escuchar eventos de 'typing'
+socket.on('typing', ({ user }) => {
+  typingUsers.add(user);
+  updateTypingIndicator();
+});
+
+socket.on('stopTyping', ({ user }) => {
+  typingUsers.delete(user);
+  updateTypingIndicator();
 });

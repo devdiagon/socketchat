@@ -23,6 +23,20 @@ const realTimeServer = (httpServer) => {
         }),
       });
     });
+    
+    // Llamar al evento 'typing' cuando esté escribiendo
+    socket.on('typing', () => {
+      const user = getUserFromSocket(socket);
+      // Usar bradcast para solo enviar al resto menos al usuario actual
+      socket.broadcast.emit('typing', { user });
+    });
+
+    // Llamar al evento 'stopTyping' cuando deje de escribir
+    socket.on('stopTyping', () => {
+      const user = getUserFromSocket(socket);
+      // Usar bradcast para solo enviar al resto menos al usuario actual
+      socket.broadcast.emit('stopTyping', { user });
+    });
   });
 };
 
