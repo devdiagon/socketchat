@@ -1,9 +1,12 @@
-const express = require('express');
-const router = express.Router();
-const path = require('path');
-const isLoggedIn = require('../middleware/isLoggedIn');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import isLoggedIn from '../middleware/isLoggedIn.js';
 
-const views = path.join(__dirname, '/../views');
+const router = express.Router();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const views = path.join(__dirname, '..', 'views');
 
 // Verificar si el usuario está loggeado con un middleware
 router.get('/', isLoggedIn , (req, res) => {
@@ -14,4 +17,4 @@ router.get('/register', (req, res) => {
   res.sendFile(views + '/register.html');
 });
 
-module.exports = router;
+export default router;

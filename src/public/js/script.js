@@ -1,32 +1,11 @@
+import { getCurrentUser } from '../../utils/cookieUtils.js';
+import { escapeHTML } from '../../utils/stringUtils.js';
+
 // Iniciar servidor de Socket
 const socket = io();
 
 const send = document.querySelector('#send-message');
 const allMessages = document.querySelector('#all-messages');
-
-// Función para sanitizar y escapar caracteres HTML para prevenir XSS
-const escapeHTML = (text) => {
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, (char) => map[char]);
-};
-
-// Función para obtener el usuario actual de la cookie
-const getCurrentUser = () => {
-  const cookies = document.cookie.split(';');
-  for (let cookie of cookies) {
-    const [key, value] = cookie.trim().split('=');
-    if (key === 'username') {
-      return value;
-    }
-  }
-  return null;
-};
 
 // En caso de presionar enter enviar mensaje
 document.querySelector('#message').addEventListener('keypress', (e) => {
