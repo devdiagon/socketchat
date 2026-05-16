@@ -18,6 +18,7 @@ router.get('/register', (req, res) => {
   res.sendFile(views + '/register.html');
 });
 
+
 /**
  * @route GET /io-test
  * @description Endpoint para demostrar la concurrencia de I/O.
@@ -38,5 +39,25 @@ router.get('/io-test', (req, res) => {
   res.type('json').send(data);
  });
 });
+
+
+/**
+ * @route GET /cpu-block
+ * @description Endpoint para demostrar el bloqueo del Event Loop.
+ * Realiza un cálculo síncrono intensivo que acapara la CPU.
+ */
+router.get('/cpu-block', (req, res) => {
+ // Esta función es síncrona y pesada.
+ // Mientras se ejecuta, el Event Loop está completamente bloqueado
+ // y no puede procesar NINGUNA otra petición (ni del chat, ni de I/O, etc).
+ const resultado = calcularFibonacci(40); // Usamos un número alto para que tarde lo suficiente
+ res.send(`El resultado del cálculo intensivo es: ${resultado}`);
+});
+
+// Función recursiva auxiliar para simular trabajo de CPU
+function calcularFibonacci(num) {
+ if (num <= 1) return 1;
+ return calcularFibonacci(num - 1) + calcularFibonacci(num - 2);
+}
 
 export default router;
