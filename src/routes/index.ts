@@ -55,7 +55,7 @@ router.get('/cpu-block', (req, res) => {
 });
 
 // Función recursiva auxiliar para simular trabajo de CPU
-function calcularFibonacci(num) {
+function calcularFibonacci(num: number): number {
  if (num <= 1) return 1;
  return calcularFibonacci(num - 1) + calcularFibonacci(num - 2);
 }

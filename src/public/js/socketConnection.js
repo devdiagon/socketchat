@@ -1,5 +1,5 @@
-import { getCurrentUser } from '../../utils/cookieUtils.js';
-import { escapeHTML } from '../../utils/stringUtils.js';
+import { getCurrentUser } from './utils/cookieUtils.js';
+import { escapeHTML } from './utils/stringUtils.js';
 
 // Iniciar servidor de Socket
 const socket = io();

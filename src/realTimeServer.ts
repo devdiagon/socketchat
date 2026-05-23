@@ -1,16 +1,16 @@
 import { Server } from 'socket.io';
 import { getUserFromSocket } from './utils/cookieUtils.js';
+import type { Server as HttpServer } from 'http';
 
-const realTimeServer = (httpServer) => {
+const realTimeServer = (httpServer: HttpServer) => {
   const io = new Server(httpServer);
 
   // Encender la contectividad del socket
-  io.on('connection', (socket) => {
+  io.on('connection', (socket: import('socket.io').Socket) => {
     // console.log(`ID: ${socket.id}`);
 
     // Llamar al evento 'message' y obtener sus parámetros (en este caso con la variable llamada message)
-    socket.on('message', message => {
-
+    socket.on('message', (message: string) => {
       const user = getUserFromSocket(socket);
 
       io.emit('message', {
