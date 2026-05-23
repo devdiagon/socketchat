@@ -4,20 +4,19 @@ import { escapeHTML } from '../../utils/stringUtils.js';
 // Iniciar servidor de Socket
 const socket = io();
 
-const send = document.querySelector('#send-message');
-const allMessages = document.querySelector('#all-messages');
+const sendBtn = document.querySelector('#send-message');
+const msgInput = document.querySelector('#message');
+const messagesDisplay = document.querySelector('#all-messages');
 
 // En caso de presionar enter enviar mensaje
-document.querySelector('#message').addEventListener('keypress', (e) => {
+msgInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
-    // Lanzar el evento click del botón de envío de mensaje
-    send.click();
+    sendBtn.click();
   }
 });
 
-send.addEventListener('click', () => {
-  // Capturar el valor del mensaje escrito
-  const message = document.querySelector('#message').value;
+sendBtn.addEventListener('click', () => {
+  const message = msgInput.value;
 
   // No enviar si el mensaje está en blanco/vacio
   if (message.trim() === '') return;
@@ -26,10 +25,10 @@ send.addEventListener('click', () => {
   socket.emit("message", message);
 
   // Limpiar el input del mensaje
-  document.querySelector('#message').value = '';
+  msgInput.value = '';
 
   // Hacer focus en el input del mensaje
-  document.querySelector('#message').focus();
+  msgInput.focus();
  });
 
 // Escuchar el evento "message" para mostrar los mensajes en pantalla
@@ -53,14 +52,14 @@ socket.on('message', ({ user, message, timestamp }) => {
       </div>
     </div>
   `);
-  allMessages.append(msg);
+  messagesDisplay.append(msg);
 });
 
 
 // Manejo del evento typing
 let typingTimeout = null;
 
-document.querySelector('#message').addEventListener('input', () => {
+msgInput.addEventListener('input', () => {
   // Emitir el evento de 'typing' (está escribiendo)
   socket.emit('typing');
 
